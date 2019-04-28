@@ -1,0 +1,17 @@
+package com.java.restservice.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import com.java.restservice.entity.Project;
+
+import java.util.stream.Stream;
+
+@RepositoryRestResource(exported = false)
+public interface ProjectRepository extends JpaRepository<Project, String> {
+
+    @Query("select SUM(p.revenue) from Project p where p.date between @StartDate and @EndDate GROUP BY project")
+    Stream<Project> findByEmailReturnStream(@Param("StartDate") String email);
+}
